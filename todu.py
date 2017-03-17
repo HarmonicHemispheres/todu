@@ -18,6 +18,7 @@ def main(arg=sys.argv):
         return
     if (arg[1] == "add"):
         add_task(arg[2], arg[3])
+        show_task()
     elif (arg[1] == "clear"):
         clear()
     elif (arg[1] == "rm"):
@@ -25,7 +26,7 @@ def main(arg=sys.argv):
 
 # ========== FUNCTIONS ========== 
 def today():
-    return dt.today().strftime("%m/%d/%Y")
+    return dt.today().strftime("%Y-%m-%d")
 
 def clear():
     tasks = tasklist("w")
@@ -36,15 +37,30 @@ def wl(L):
         TASKS.write(i + "\n")
 
 def show_task():
+
     tasks = tasklist("r")
-    for i in tasks.splitlines():
-        print(i)
+    tl = tasks.splitlines()
+    sorted(tl)
+    sp = max(tl, key=len)
+    print(sp)
+    sp = len(sp.split("--")[1])
+    for i in tl:
+        t = i.split("--")
+        name = t[1]
+        date = t[2]
+        print(name + " "*sp + date )
 
 def gen_key():
     # generates a id for the new task based 
     # on the first open slot.
-
-    return
+    tasks = tasklist("r")
+    tl = tasks.splitlines()
+    index = 0
+    for ln in tl:
+        if (int(ln.split("--")[0]) != index):
+            return index
+        index += 1
+    return index
 
 def rm_task(ID):
     TASKS = tasklist("r") 
@@ -63,11 +79,10 @@ def add_task(item, date):
         group = sys.argv[4]
     else:
         group = ""
-
-    ID = 0
-    for i in tl:
-        ID += 1
-    tl.append(str(ID) + " "  + item + " --- " + date + " " + group)    
+    ID = gen_key()
+    tl.append(str(ID) + "--"  + item + "--" + date + "--" + group)    
+    if (len(tl) > 1):
+        tl = sorted(tl, key=lambda x: int(x.split("--")[0]))
     wl(tl)   
  
 # ========== MAIN ========== 
