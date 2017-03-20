@@ -173,7 +173,7 @@ def gen_key(sub="na"):
     if (sub != "na"):
         sub_in = 0
         for ln in tl:
-            if (int(ln.split("--")[0].split(".")[0]) < int(sub)):
+            if (int(ln.split("--")[0].split(".")[0]) < int(sub) and "." not in ln.split("--")[0]):
                 index += 1
             elif (ln.split("--")[0].split(".")[0] == sub and len(ln.split("--")[0].split(".")) > 1):
                 if (int(ln.split("--")[0].split(".")[1]) != sub_in):
@@ -182,7 +182,7 @@ def gen_key(sub="na"):
         return float(str(index) + "." + str(sub_in)) 
     else:
         for ln in tl:
-            if (int(ln.split("--")[0]) != index):
+            if (int(ln.split("--")[0].split(".")[0]) != index):
                 return index
             index += 1
         return index
