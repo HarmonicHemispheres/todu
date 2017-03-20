@@ -1,15 +1,26 @@
 #!/usr/bin/env python3
+# ====================================
 
 import sys
 import datetime as dtm
 from time import gmtime, strftime
 from operator import itemgetter
 
+# =========== USER OPTIONS ===========
+
+data_path = "/Users/themusicman/bin/todu_data.txt"
+help_path = "/Users/themusicman/bin/todu_help.txt"
+
+# Default show options 
+sh_id = 1
+sh_ordr = 1
+sh_thisweek = 0
+sh_lft = 0
+sh_fl = 1
+
 # ========== GLOBALS FUNCS  ========== 
 
 def tasklist(opt):
-    data_path = "/Users/themusicman/bin/todu_data.txt"
-    help_path = "/Users/themusicman/bin/todu_help.txt"
     if (opt == "r"):
         return open(data_path, "r").read() 
     if (opt == "w"):
@@ -89,22 +100,22 @@ function in order to print out specific information.
 SEE: todu_help.txt for a complete list of extra commands
 """
 def show_task(cmdsList=[]):
-    sh_id = 1
-    sh_ordr = 0
-    sh_thisweek = 0
-    sh_lft = 0
-    sh_fl = 0
+    global sh_id
+    global sh_ordr
+    global sh_thisweek
+    global sh_lft
+    global sh_fl 
     for i in cmdsList:
         if (i == "-id"):
-            sh_id = 0
+            sh_id = (sh_id+1)%2
         elif (i == "-ordr"):
-            sh_ordr = 1
+            sh_ordr = (sh_ordr+1)%2
         elif (i == "-wk"):
-            sh_thisweek = 1
+            sh_thisweek = (sh_thisweek+1)%2
         elif (i == "-lft"):
-            sh_lft = 1
+            sh_lft = (sh_lft+1)%2
         elif (i == "-fl"):
-            sh_fl = 1
+            sh_fl = (sh_fl+1)%2
 
     tasks = tasklist("r")
     tl = [i.split("--") for i in tasks.splitlines()]
