@@ -1,0 +1,13 @@
+todu                            # show tasks
+    -wk             # show this weeks tasks
+    -id             # silences ids
+    -ordr           # ordrs tasks by date
+    -fl             # show flags with tasks
+todu add "task" "date"          # add tasks
+todu etask id# "new task"       # edit task
+todu edate id# "new date"       # edit date
+todu clear                      # clear all tasks
+todu rm id#                     # removes task with id#
+    -fl             # removes flags from id
+todu help                       # shows this doc
+

@@ -16,11 +16,13 @@ FILES:
     .todu-conf          -settings for how update should function when called
 
 FUNCTIONS:
+    "" all lines starting with #, are not implemented yet ""
+
     todu add "task" "date"      -adds the task to the todolist
-        -sub=id                   -adds this task as a sub task of id
-        -days=X                   -adds this task to X days from now
-        -weeks=X                  -adds task to X weeks from now
-    todu update                 -follows settings in .todo-conf
+       # -sub=id                   -adds this task as a sub task of id
+       # -days=X                   -adds this task to X days from now
+       # -weeks=X                  -adds task to X weeks from now
+    # todu update                 -follows settings in .todo-conf
     todu edit id type "new"     -changes the the task desc to Y 
         type=desc                 -changes the desc for the task
         type=note                 -changes the note for the task
