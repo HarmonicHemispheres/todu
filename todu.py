@@ -49,6 +49,13 @@ def main(arg=sys.argv):
 
 # ========== FUNCTIONS ========== 
 
+def is_num(i):
+    try:
+        float(i)
+        return 1
+    except ValueError:
+        return 0
+
 """=================================================
 This function prints the contents of todu_help.txt
 to stdout. this provides a useful function for seeing
@@ -58,13 +65,13 @@ def show_funcs(help_path):
     output = open(help_path, "r").read()
     for i in output.splitlines():
         print(i)
+
 """=================================================
 This function returns the date of today, or if "wk"
 then it returns the date of 7 days from today.
 """
 def today(wk=0):
     today = strftime("%Y-%m-%d", gmtime())
-    print(today)
     if (wk):
         today = today.split("-")
         today[2] = str( int(today[2]) + 7 )
@@ -92,8 +99,7 @@ def time_left(date):
     d0 = dtm.date(int(tday[0]), int(tday[1]), int(tday[2]))
     d1 = dtm.date(int(dt[0]), int(dt[1]), int(dt[2]))
     dlta = d1 - d0
-    # dtm.datetime.strptime(date, '%Y-%m-%d')
-    return str(dlta.days + 1)
+    return str(dlta.days)
 
 """ ==================================================
 This function prints the contents of todu_data.txt
@@ -108,6 +114,7 @@ def show_task(cmdsList=[]):
     global sh_lft
     global sh_fl 
     global sh_sub
+    sh_thisId = 0
     for i in cmdsList:
         if (i == "-id"):
             sh_id = (sh_id+1)%2
@@ -115,12 +122,17 @@ def show_task(cmdsList=[]):
             sh_ordr = (sh_ordr+1)%2
         elif (i == "-wk"):
             sh_thisweek = (sh_thisweek+1)%2
-        elif (i == "-lft"):
+        elif (i == "-left"):
             sh_lft = (sh_lft+1)%2
         elif (i == "-fl"):
             sh_fl = (sh_fl+1)%2
         elif (i == "-sub"):
             sh_sub = (sh_sub+1)%2
+        elif (is_num(i[1:]) == 1):
+            sh_thisId = 1
+            sh_sub = 1
+            sh_ordr = 0
+            check = i[1:]
 
     tasks = tasklist("r")
     tl = [i.split("--") for i in tasks.splitlines()]
@@ -141,8 +153,9 @@ def show_task(cmdsList=[]):
         if (sh_thisweek):
             onewk = today(wk=1)
             if (i[2] > onewk):
-               # print("---->", i[2], "---->", onewk)
                 prt = 0
+        if (sh_thisId and i[0].split(".")[0] != check):
+            prt = 0
         if (not sh_sub and "." in i[0]):
             prt = 0
         elif ("." in i[0]):
@@ -182,9 +195,10 @@ def gen_key(sub="na"):
         return float(str(index) + "." + str(sub_in)) 
     else:
         for ln in tl:
-            if (int(ln.split("--")[0].split(".")[0]) != index):
+            if (int(ln.split("--")[0].split(".")[0]) != index and "." not in ln.split("--")[0]):
                 return index
-            index += 1
+            if ("." not in ln.split("--")[0]):
+                index += 1
         return index
 
 def rm_task(ID, arg):
@@ -195,16 +209,23 @@ def rm_task(ID, arg):
 
     TASKS = tasklist("r") 
     tl = TASKS.splitlines()
-    for i in range(len(tl)):
-        if (tl[i].split("--")[0] == ID ):
+    i = 0
+    while (i < len(tl)):
+        if ("." in ID and tl[i].split("--")[0] == ID ): 
+            print("DELETED-1:", ID, " @ ", tl[i])
+            tl.remove(tl[i])
+            break
+        elif (tl[i].split("--")[0].split(".")[0] == ID ):
             if (rm_fl):
                 newline = tl[i].split("--")
                 newline[3] = " "
                 newline = "--".join(newline)
                 tl[i] = newline
             else:
+                print("DELETED-2:", ID, " @ ", tl[i])
                 tl.remove(tl[i])
-            break
+                i -= 1
+        i += 1
     wl(tl) 
 
 def add_task(item, date, argL):
