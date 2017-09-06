@@ -1,0 +1,9 @@
+# var, on/off, option, desc
+COM=todu
+sh_id,1,-id,show task id's
+sh_ordr,1,-ordr,order task by date
+sh_thisweek,0,-wk,show this week
+sh_lft,1,-left,show days left
+sh_fl,1,-fl,show flags
+sh_sub,0,-sub,show subtasks
+COM=END

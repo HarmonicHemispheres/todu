@@ -4,6 +4,7 @@ todu                            # show tasks
     -ordr           # ordrs tasks by date
     -fl             # show flags with tasks
 todu add "task" "date"          # add tasks
+todu flag id# "text"            # add a flag text to the task
 todu etask id# "new task"       # edit task
 todu edate id# "new date"       # edit date
 todu clear                      # clear all tasks
